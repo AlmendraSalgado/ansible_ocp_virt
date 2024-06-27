@@ -1,24 +1,24 @@
 ---
-- hosts: sandbox
+- hosts: localhost
   vars:
-    project_dir: demo-ocpvirt-webapp
-    env: dev
-  vars_files:
-    - project_vars.yaml
+    namespace_name: "demo-ocpvirt-webapp"
 
   tasks:
-    - name: Ensure project dir exists in the hosts
-      # Content suggestion provided by Ansible Lightspeed
-      ansible.builtin.file:
-        path: "{{ project_dir }}"
-        state: directory
-
-    - name: Getting the namespace template
-      ansible.builtin.template:
-        src: namespace.yaml.j2
-        dest: "{{ project_dir }}/namespace.yaml"
-
-    - name: Create openshift namespace using the recently created template
+    - name: Create OpenShift Namespace
       kubernetes.core.k8s:
-        state: "{{ state }}"
-        src: "{{ project_dir }}/namespace.yaml"
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: "{{ namespace_name }}"
+
+    - name: Create an Openshift Virtualization virtual machine
+      redhat.openshift_virtualization.kubevirt_vm:
+        state: present
+        namespace: "{{ namespace_name }}"
+        name: "webapp"
+        instancetype:
+          name: u1.medium
+        preference:
+          name: fedora

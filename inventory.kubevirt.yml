@@ -1,4 +1,7 @@
 ---
 plugin: redhat.openshift_virtualization.kubevirt
 connections:
-  - use_service: False
+  - host: "{{ ocp_host }}"
+    api_key: "{{ ocp_api_key }}"
+    validate_certs: false
+    use_service: False

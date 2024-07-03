@@ -52,5 +52,5 @@
     - name: Wait for the VM to be running
       redhat.openshift_virtualization.kubevirt_vm_info:
         namespace: "{{ namespace_name }}"
-        name: "{{ virt_machine_name }"
+        name: "{{ virt_machine_name }}"
         wait: true

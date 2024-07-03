@@ -1,8 +1,5 @@
 ---
 - hosts: all
-  vars:
-    namespace_name: "demo-ocpvirt-webapp"
-    virt_machine_name: "webapp"
 
   tasks:
     - name: Create OpenShift Namespace

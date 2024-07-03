@@ -2,6 +2,9 @@
 plugin: redhat.openshift_virtualization.kubevirt
 connections:
   - host: https://api.rosa-564h7.xtob.p3.openshiftapps.com:443
-    api_key: '{{ ocp_api_key }}'
+    # api_key: '{{ ocp_api_key }}'
+    username: '{{ ocp_username }}'
+    password: '{{ ocp_password }}'
     validate_certs: false
     use_service: False
+    use_extra_vars: true

@@ -1,7 +1,7 @@
 ---
 plugin: redhat.openshift_virtualization.kubevirt
 connections:
-  - host: https://api.s65vg.dynamic.redhatworkshops.io:6443
+  - host: '{{ ocp_host }}'
     # api_key: '{{ ocp_api_key }}'
     username: '{{ ocp_username }}'
     password: '{{ ocp_password }}'

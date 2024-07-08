@@ -1,7 +1,7 @@
 ---
 plugin: redhat.openshift_virtualization.kubevirt
 connections:
-  - host: '{{ ocp_host }}'
+  - host: https://api.g4gmx.dynamic.redhatworkshops.io:6443
     # api_key: '{{ ocp_api_key }}'
     username: '{{ ocp_username }}'
     password: '{{ ocp_password }}'

@@ -21,6 +21,10 @@
         preference:
           name: fedora
         spec:
+          template:
+            metadata:
+              labels:
+                kubevirt.io/domain: "{{ virt_machine_name }}"
           domain:
             devices:
               interfaces:

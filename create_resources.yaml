@@ -40,16 +40,6 @@
                   name: default
               networkInterfaceMultiqueue: true
               rng: {}
-            features:
-              acpi: {}
-              smm:
-                enabled: true
-            firmware:
-              bootloader:
-                efi: {}
-            machine:
-              type: q35
-          hostname: "{{ virt_machine_name }}"
           networks:
             - name: default
               pod: {}
@@ -65,6 +55,8 @@
                     expire: false
                   password: {{ ssh_vm_password }}
                   user: {{ ssh_vm_username }}
+                  ssh_authorized_keys:
+                    - {{ ssh_vm_pubkey }}
               name: cloudinitdisk
 
     - name: Wait for the VM to be running

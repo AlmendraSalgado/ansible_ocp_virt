@@ -26,10 +26,6 @@
               labels:
                 vm.kubevirt.io/name: "{{ virt_machine_name }}"
           domain:
-            cpu:
-              cores: 1
-              sockets: 1
-              threads: 1
             devices:
               disks:
                 - disk:
@@ -53,8 +49,6 @@
                 efi: {}
             machine:
               type: q35
-            memory:
-              guest: 2Gi
           hostname: "{{ virt_machine_name }}"
           networks:
             - name: default

@@ -24,25 +24,53 @@
           template:
             metadata:
               labels:
-                kubevirt.io/domain: "{{ virt_machine_name }}"
+                vm.kubevirt.io/name: "{{ virt_machine_name }}"
           domain:
+            cpu:
+              cores: 1
+              sockets: 1
+              threads: 1
             devices:
+              disks:
+                - disk:
+                    bus: virtio
+                  name: rootdisk
+                - disk:
+                    bus: virtio
+                  name: cloudinitdisk
               interfaces:
-                - name: default
-                  masquerade: {}
+                - masquerade: {}
+                  model: virtio
+                  name: default
+              networkInterfaceMultiqueue: true
+              rng: {}
+            features:
+              acpi: {}
+              smm:
+                enabled: true
+            firmware:
+              bootloader:
+                efi: {}
+            machine:
+              type: q35
+            memory:
+              guest: 2Gi
+          hostname: "{{ virt_machine_name }}"
           networks:
             - name: default
               pod: {}
+          terminationGracePeriodSeconds: 180
           volumes:
-            - containerDisk:
-                image: quay.io/containerdisks/fedora:latest
-              name: containerdisk
+            - name: rootdisk
+              containerDisk:
+                image: quay.io/containerdisks/fedora
             - cloudInitNoCloud:
-                userData: |-
+                userData: |
                   #cloud-config
-                  # The default username is: fedora
-                  ssh_authorized_keys:
-                    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC8TVghDy/PUIzksr8/Um03Hvqfc5Zf662OEEV8iZ9tJi0KcnJWNoAu29TxJad9Muv6IGV99x657+TRV+nZgExkRF1ZgL/Ko2xo6V7ORZkMePTb8MxU+afMwFAmpsPmwgGpzvP09XXgLA3XHdlyDXyFzMuPADAUetYOtt6IFda+i6Klj/DcXJZ78ZX3r/h50X0KM4hpKZaPsDd1kb5xhY6pyxF2LCQ4JkcHcFh07J+jharqpGU5FhVxE4IFdSh3Tn8Ozh6lgE9sTyjuK40R8Gwzuel1R2aFYkkwXzMXakDQaWvpP96a3aGQJYm3S5njj7OVJZy8KvWY9BqSipu+MqUQjYcORwAuTj/AG8CrBQTxAcco4P2F/kRtXm0imbToTkM7hZS0TaeyluifcYChoa1zazvlOAyVdYndt6Mmlr6XvkAWeJ9qtNY6rJ6CHeSCQtaVdEebxCofRBCJLJINKzuB6A6i9uVE96nywCumkkGZimy+LGGANBKNMI1E303aUDU= asalgado@asalgado-mac
+                  chpasswd:
+                    expire: false
+                  password: {{ ssh_vm_password }}
+                  user: {{ ssh_vm_username }}
               name: cloudinitdisk
 
     - name: Wait for the VM to be running
@@ -62,7 +90,7 @@
             namespace: "{{ namespace_name }}"
           spec:
             selector:
-              kubevirt.io/domain: "{{ virt_machine_name }}"
+              vm.kubevirt.io/name: "{{ virt_machine_name }}"
             type: ClusterIP
             ports:
               - name: http

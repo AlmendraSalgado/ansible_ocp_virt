@@ -1,0 +1,10 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Remove OpenShift Namespace
+      kubernetes.core.k8s:
+        name: "{{ namespace_name }}"
+        api_version: v1
+        kind: Namespace
+        state: absent

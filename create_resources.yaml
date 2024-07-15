@@ -81,7 +81,7 @@
             ports:
               - name: http
                 port: 80
-                targetPort: 80
+                targetPort: "{{ app_source_port }}"
                 protocol: TCP
 
     - name: Create a route in OCP to expose the service

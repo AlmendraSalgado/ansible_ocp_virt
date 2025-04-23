@@ -1,8 +1,12 @@
 ---
-- hosts: all
+- name: Create/Ensure exists namespace and VM
+  hosts: all
+
+  vars_files:
+    - vm_vars/vms.yml
 
   tasks:
-    - name: Create OpenShift Namespace
+    - name: Create/Ensure exists OpenShift Namespace
       kubernetes.core.k8s:
         state: present
         definition:
@@ -24,7 +28,7 @@
           template:
             metadata:
               labels:
-                vm.kubevirt.io/name: "{{ virt_machine_name }}"
+                vm.kubevirt.io/name: "{{ vm_name }}"
           domain:
             devices:
               disks:
@@ -55,48 +59,10 @@
                     expire: false
                   password: {{ ssh_vm_password }}
                   user: {{ ssh_vm_username }}
-                  ssh_authorized_keys:
-                    - {{ ssh_vm_pubkey }}
               name: cloudinitdisk
 
     - name: Wait for the VM to be running
       redhat.openshift_virtualization.kubevirt_vm_info:
         namespace: "{{ namespace_name }}"
-        name: "{{ virt_machine_name }}"
+        name: "{{ vm_name }}"
         wait: true
-
-    - name: Create a service in OCP to expose port 80 for the virt machine just created
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Service
-          metadata:
-            name: "{{ virt_machine_name }}"
-            namespace: "{{ namespace_name }}"
-          spec:
-            selector:
-              vm.kubevirt.io/name: "{{ virt_machine_name }}"
-            type: ClusterIP
-            ports:
-              - name: http
-                port: 80
-                targetPort: "{{ app_source_port }}"
-                protocol: TCP
-
-    - name: Create a route in OCP to expose the service
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: route.openshift.io/v1
-          kind: Route
-          metadata:
-            name: "{{ virt_machine_name }}"
-            namespace: "{{ namespace_name }}"
-          spec:
-            to:
-              kind: Service
-              name: "{{ virt_machine_name }}"
-            port:
-              targetPort: http
-            wildcardPolicy: None

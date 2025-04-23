@@ -19,7 +19,7 @@
       redhat.openshift_virtualization.kubevirt_vm:
         state: present
         namespace: "{{ namespace_name }}"
-        name: "{{ virt_machine_name }}"
+        name: "{{ vm_name }}"
         instancetype:
           name: u1.medium
         preference:

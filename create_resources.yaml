@@ -1,6 +1,6 @@
 ---
 - name: Create/Ensure exists namespace and VM
-  hosts: all
+  hosts: localhost
 
   vars_files:
     - vm_vars/vms.yml

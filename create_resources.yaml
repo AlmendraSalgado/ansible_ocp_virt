@@ -5,7 +5,7 @@
   vars_files:
     - vm_vars/vms.yml
 
-  tasks:
+  tasks:        
     - name: Create/Ensure exists OpenShift Namespace
       kubernetes.core.k8s:
         state: present
@@ -13,22 +13,23 @@
           apiVersion: v1
           kind: Namespace
           metadata:
-            name: "{{ namespace_name }}"
+            name: "{{ item }}"
+      loop: "{{ vms | map(attribute='namespace_name') | unique | list }}"
 
     - name: Create an Openshift Virtualization virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
         state: present
-        namespace: "{{ namespace_name }}"
-        name: "{{ vm_name }}"
+        namespace: "{{ item.namespace_name }}"
+        name: "{{ item.vm_name }}"
         instancetype:
-          name: u1.medium
+          name: "{{ item.instancetype }}"
         preference:
-          name: fedora
+          name: "{{ item.preference }}"
         spec:
           template:
             metadata:
               labels:
-                vm.kubevirt.io/name: "{{ vm_name }}"
+                vm.kubevirt.io/name: "{{ item.vm_name }}"
           domain:
             devices:
               disks:
@@ -57,12 +58,14 @@
                   #cloud-config
                   chpasswd:
                     expire: false
-                  password: {{ ssh_vm_password }}
-                  user: {{ ssh_vm_username }}
+                  password: {{ item.ssh_vm_password }}
+                  user: {{ item.ssh_vm_username }}
               name: cloudinitdisk
+      loop: "{{ vms }}"
 
     - name: Wait for the VM to be running
       redhat.openshift_virtualization.kubevirt_vm_info:
-        namespace: "{{ namespace_name }}"
-        name: "{{ vm_name }}"
+        namespace: "{{ item.namespace_name }}"
+        name: "{{ item.vm_name }}"
         wait: true
+      loop: "{{ vms }}"

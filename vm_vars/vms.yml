@@ -1,7 +1,20 @@
 ---
-- namespace_name: ocp-koala
-  vm_name: vm-1
-  instancetype: u1.medium
-  preference: fedora
-  ssh_vm_username: fedora
-  ssh_vm_password: redhat123
+vms:
+  - namespace_name: ocp-koala
+    vm_name: vm-1
+    instancetype: u1.medium
+    preference: fedora
+    ssh_vm_username: fedora
+    ssh_vm_password: redhat123
+  - namespace_name: ocp-panda
+    vm_name: vm-3
+    instancetype: u1.small
+    preference: fedora
+    ssh_vm_username: fedora
+    ssh_vm_password: redhat123
+  - namespace_name: ocp-koala
+    vm_name: vm-2
+    instancetype: u1.medium
+    preference: fedora
+    ssh_vm_username: fedora
+    ssh_vm_password: redhat1234

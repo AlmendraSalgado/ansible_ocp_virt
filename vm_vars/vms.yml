@@ -1,6 +1,6 @@
 ---
 - namespace_name: ocp-koala
-  vm_name: vm_1
+  vm_name: vm-1
   instancetype: u1.medium
   preference: fedora
   ssh_vm_username: fedora

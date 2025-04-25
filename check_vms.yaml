@@ -1,0 +1,15 @@
+---
+- name: Create/Ensure exists namespace and VM
+  hosts: all
+
+  vars_files:
+    - vm_vars/vms.yml
+
+  tasks:
+    - name: Get all existing vms in Openshift Virtualization
+      redhat.openshift_virtualization.kubevirt_vm_info:
+      register: vm_list
+
+    - debug:
+        var: vm_list 
+

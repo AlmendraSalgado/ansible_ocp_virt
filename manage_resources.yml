@@ -1,5 +1,5 @@
 ---
-- name: Create/Ensure exists namespace and VM
+- name: Manage VMs in Openshift Virtualization
   hosts: all
 
   vars_files:
@@ -12,4 +12,3 @@
 
     - debug:
         var: vm_list 
-

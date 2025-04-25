@@ -1,71 +1,64 @@
 ---
-- name: Create/Ensure exists namespace and VM
-  hosts: all
+- name: Create/Ensure exists OpenShift Namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ item }}"
+  loop: "{{ vms | map(attribute='namespace_name') | unique | list }}"
 
-  vars_files:
-    - vm_vars/vms.yml
-
-  tasks:        
-    - name: Create/Ensure exists OpenShift Namespace
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: "{{ item }}"
-      loop: "{{ vms | map(attribute='namespace_name') | unique | list }}"
-
-    - name: Create an Openshift Virtualization virtual machine
-      redhat.openshift_virtualization.kubevirt_vm:
-        state: present
-        namespace: "{{ item.namespace_name }}"
-        name: "{{ item.vm_name }}"
-        instancetype:
-          name: "{{ item.instancetype }}"
-        preference:
-          name: "{{ item.preference }}"
-        spec:
-          template:
-            metadata:
-              labels:
-                vm.kubevirt.io/name: "{{ item.vm_name }}"
-          domain:
-            devices:
-              disks:
-                - disk:
-                    bus: virtio
-                  name: rootdisk
-                - disk:
-                    bus: virtio
-                  name: cloudinitdisk
-              interfaces:
-                - masquerade: {}
-                  model: virtio
-                  name: default
-              networkInterfaceMultiqueue: true
-              rng: {}
-          networks:
-            - name: default
-              pod: {}
-          terminationGracePeriodSeconds: 180
-          volumes:
-            - name: rootdisk
-              containerDisk:
-                image: quay.io/containerdisks/fedora
-            - cloudInitNoCloud:
-                userData: |
-                  #cloud-config
-                  chpasswd:
-                    expire: false
-                  password: {{ item.ssh_vm_password }}
-                  user: {{ item.ssh_vm_username }}
+- name: Create an Openshift Virtualization virtual machine
+  redhat.openshift_virtualization.kubevirt_vm:
+    state: present
+    namespace: "{{ item.namespace_name }}"
+    name: "{{ item.vm_name }}"
+    instancetype:
+      name: "{{ item.instancetype }}"
+    preference:
+      name: "{{ item.preference }}"
+    spec:
+      template:
+        metadata:
+          labels:
+            vm.kubevirt.io/name: "{{ item.vm_name }}"
+      domain:
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
               name: cloudinitdisk
-      loop: "{{ vms }}"
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - name: rootdisk
+          containerDisk:
+            image: quay.io/containerdisks/fedora
+        - cloudInitNoCloud:
+            userData: |
+              #cloud-config
+              chpasswd:
+                expire: false
+              password: {{ item.ssh_vm_password }}
+              user: {{ item.ssh_vm_username }}
+          name: cloudinitdisk
+  loop: "{{ vms }}"
 
-    - name: Wait for the VM to be running
-      redhat.openshift_virtualization.kubevirt_vm_info:
-        namespace: "{{ item.namespace_name }}"
-        name: "{{ item.vm_name }}"
-        wait: true
-      loop: "{{ vms }}"
+- name: Wait for the VM to be running
+  redhat.openshift_virtualization.kubevirt_vm_info:
+    namespace: "{{ item.namespace_name }}"
+    name: "{{ item.vm_name }}"
+    wait: true
+  loop: "{{ vms }}"

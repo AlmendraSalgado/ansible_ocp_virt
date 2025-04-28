@@ -11,4 +11,5 @@
       register: vm_list
 
     - debug:
-        var: vm_list 
+        msg: "{{ item.metadata.name }}" 
+      loop: vm_list.resources

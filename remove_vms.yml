@@ -4,7 +4,7 @@
 
 - name: Remove VMs if needed
   redhat.openshift_virtualization.kubevirt_vm:
-    state: present
+    state: absent
     namespace: "{{ item.namespace_name }}"
     name: "{{ item.vm_name }}"
   loop: "{{ missing_vms }}"

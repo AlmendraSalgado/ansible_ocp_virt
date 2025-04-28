@@ -21,7 +21,7 @@
 
     - name: Create a list of VMs from vars/vms.yml
       ansible.builtin.set_fact:
-        vms_from_vars: "{{ vms | map('extract', ['vm_name', 'namespace_name']) | list }}"
+        vms_from_vars: "{{ vms | map('extract', {'vm_name', 'namespace_name'}) | list }}"
 
     - name: Find VMs not included in vars/vms.yml
       ansible.builtin.set_fact:

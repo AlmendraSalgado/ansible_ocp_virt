@@ -9,4 +9,3 @@
     name: "{{ item.vm_name }}"
   loop: "{{ missing_vms }}"
   register: vm_reason
-  ignore_errors: true

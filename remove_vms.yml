@@ -2,9 +2,9 @@
 - ansible.builtin.debug:
     msg: "Removing will start soon"
 
-# - name: Remove VMs if needed
-#   redhat.openshift_virtualization.kubevirt_vm:
-#     state: present
-#     namespace: "{{ item.namespace_name }}"
-#     name: "{{ item.vm_name }}"
-#   loop: "{{ missing_vms }}"
+- name: Remove VMs if needed
+  redhat.openshift_virtualization.kubevirt_vm:
+    state: present
+    namespace: "{{ item.namespace_name }}"
+    name: "{{ item.vm_name }}"
+  loop: "{{ missing_vms }}"

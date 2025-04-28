@@ -14,6 +14,7 @@
       ansible.builtin.set_fact:
         vm_name_namespace_list: "{{ vm_name_namespace_list | default([]) + [ {'vm_name': item.metadata.name, 'namespace_name': item.metadata.namespace } ] }}"
       loop: "{{ vm_list.resources }}"
+      no_log: true
 
     - name: Debug the list of VM names and namespaces with custom attribute names
       ansible.builtin.debug:
@@ -21,11 +22,11 @@
 
     - name: Create a list of VMs from vars/vms.yml
       ansible.builtin.set_fact:
-        vms_from_vars: "{{ vms | map('extract', {'vm_name', 'namespace_name'}) | list }}"
+        vms_from_vars: "{{ vms | map('combine', [{'vm_name': item.vm_name, 'namespace_name': item.namespace_name} for item in vms]) | list }}"
 
     - name: Find VMs not included in vars/vms.yml
       ansible.builtin.set_fact:
-        missing_vms: "{{ vm_name_namespace_list | selectattr('vm_name', 'defined') | selectattr('namespace_name', 'defined') | selectattr('item', 'not in', vms_from_vars) | list }}"
+        missing_vms: "{{ vm_name_namespace_list | difference(vms_from_vars) }}"
 
     - name: Debug the list of missing VMs
       ansible.builtin.debug:

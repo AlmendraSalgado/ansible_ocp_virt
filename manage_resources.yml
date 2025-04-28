@@ -18,3 +18,15 @@
     - name: Debug the list of VM names and namespaces with custom attribute names
       ansible.builtin.debug:
         var: vm_name_namespace_list
+
+    - name: Create a list of VMs from vars/vms.yml
+      ansible.builtin.set_fact:
+        vms_from_vars: "{{ vms | map('extract', ['vm_name', 'namespace_name']) | list }}"
+
+    - name: Find VMs not included in vars/vms.yml
+      ansible.builtin.set_fact:
+        missing_vms: "{{ vm_name_namespace_list | selectattr('vm_name', 'defined') | selectattr('namespace_name', 'defined') | selectattr('item', 'not in', vms_from_vars) | list }}"
+
+    - name: Debug the list of missing VMs
+      ansible.builtin.debug:
+        var: missing_vms

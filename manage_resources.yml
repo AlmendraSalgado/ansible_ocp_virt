@@ -12,4 +12,4 @@
 
     - debug:
         msg: "{{ item.metadata.name }}" 
-      loop: vm_list.resources
+      loop: "{{ vm_list.resources }}"

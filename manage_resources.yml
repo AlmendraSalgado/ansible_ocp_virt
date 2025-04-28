@@ -12,8 +12,8 @@
 
     - name: Create a list of VM names and namespaces with custom attribute names
       ansible.builtin.set_fact:
-        vm_name_namespace_list: >-
-          {{ vm_list.resources | map(attribute='metadata') | map(attribute='name, namespace') }}
+        vm_name_namespace_list: "{{ vm_name_namespace_list | default([]) + [ {'vm_name': item.metadata.name, 'namespace_name': item.metadata.namespace } ] }}"
+      loop: "{{ vm_list.resources }}"
 
     - name: Debug the list of VM names and namespaces with custom attribute names
       ansible.builtin.debug:

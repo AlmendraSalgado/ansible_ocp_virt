@@ -28,6 +28,7 @@
     - name: Find VMs not included in vars/vms.yml
       ansible.builtin.set_fact:
         missing_vms: "{{ vm_name_namespace_list | difference(vms_from_vars) }}"
+      when: vm_name_namespace_list | length > 0
 
     - name: Include remove_vms.yml tasks
       ansible.builtin.include_tasks: remove_vms.yml

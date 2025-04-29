@@ -19,6 +19,7 @@
     - name: Debug the list of VM names and namespaces with custom attribute names
       ansible.builtin.debug:
         var: vm_name_namespace_list
+      when: vm_name_namespace_list is defined
 
     - name: Create a list of VMs from vars/vms.yml
       ansible.builtin.set_fact:
@@ -28,7 +29,7 @@
     - name: Find VMs not included in vars/vms.yml
       ansible.builtin.set_fact:
         missing_vms: "{{ vm_name_namespace_list | difference(vms_from_vars) }}"
-      when: vm_name_namespace_list | length > 0
+      when: vm_name_namespace_list is defined
 
     - name: Include remove_vms.yml tasks
       ansible.builtin.include_tasks: remove_vms.yml

@@ -33,7 +33,7 @@
 
     - name: Include remove_vms.yml tasks
       ansible.builtin.include_tasks: remove_vms.yml
-      when: missing_vms | length > 0
+      when: missing_vms | length > 0 and missing_vms is defined
 
     - name: Create VMs 
       ansible.builtin.include_tasks: create_vms.yml

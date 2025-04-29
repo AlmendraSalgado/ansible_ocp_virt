@@ -1,14 +1,14 @@
 ---
 vms:
-  - namespace_name: ocp-koala
-    vm_name: vm-1
-    instancetype: u1.medium
-    preference: fedora
+  # - namespace_name: ocp-koala
+  #   vm_name: vm-1
+  #   instancetype: u1.medium
+  #   preference: fedora
   # - namespace_name: ocp-panda
   #   vm_name: vm-3
   #   instancetype: u1.small
   #   preference: fedora
-  - namespace_name: ocp-koala
-    vm_name: vm-2
-    instancetype: u1.medium
-    preference: fedora
+  # - namespace_name: ocp-koala
+  #   vm_name: vm-2
+  #   instancetype: u1.medium
+  #   preference: fedora

@@ -52,9 +52,9 @@
               chpasswd:
                 expire: false
               ssh_authorized_keys:
-                - {{ ssh_vm_pubkey }}
-              password: {{ item.ssh_vm_password }}
-              user: {{ item.ssh_vm_username }}
+                - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDaQ2TP/2b9iWI5j6Kcg1AxsfyQeJ6d8aHE0gyo71RTSGIkq+u0Qz2RAbGpojT4oVFnobIrSoQalH/GRxP/PnkFWVUwi4ZLRF/1IuKtZ10V+96x9mhihQ3nHeIuLR+7KHNbh0dc5qndDFZ2KjT8GNWQZb/tUc7Hbto+Ee1/IFySKDRHJrDJY+jRdUzaVJVAS9tbtjYxr6pcquBj1iT7y1du4LG9u1ZGcGA3apzLhibzpBrm1eCw/5+BOwJwFoP8u//OvpKNjK3cB0NsBzT0FBoVZrRbQ9lNzrBTRzW4ftF4m93JT0GLFOP5VOAy2iXf7E5p5YO5JK+1IWkuQRB8GioUczmxzxrNu1jcVvgvLOIkO84vU6h0qcuRymLcSi/Cx/ffiddBvxf9IAwb9V84IB0lMQ8WvbP0pdIo9STcdj5awE+GkWY8KX/l9A9XlCqShM26bzmmOrxtVPpN89v3vLNGgJ7Ll9YJt/xoG1SOWbJwD83n5umNWMPZyrQVu4DgX8s= asalgado@asalgado-mac'
+              password: redhat1234
+              user: fedora
           name: cloudinitdisk
   loop: "{{ vms }}"
 

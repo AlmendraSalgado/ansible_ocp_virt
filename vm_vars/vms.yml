@@ -12,3 +12,7 @@ vms:
     vm_name: vm-2
     instancetype: u1.medium
     preference: fedora
+  - namespace_name: ocp-panda
+    vm_name: vm-5
+    instancetype: u1.medium
+    preference: fedora

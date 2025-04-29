@@ -51,6 +51,8 @@
               #cloud-config
               chpasswd:
                 expire: false
+              ssh_authorized_keys:
+                - {{ ssh_vm_pubkey }}
               password: {{ item.ssh_vm_password }}
               user: {{ item.ssh_vm_username }}
           name: cloudinitdisk

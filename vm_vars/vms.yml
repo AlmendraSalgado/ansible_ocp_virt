@@ -16,3 +16,7 @@ vms:
     vm_name: vm-5
     instancetype: u1.medium
     preference: fedora
+  - namespace_name: ocp-koala
+    vm_name: vm-4
+    instancetype: u1.medium
+    preference: fedora
